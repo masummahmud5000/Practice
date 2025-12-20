@@ -1,9 +1,8 @@
-import Navber from "./Navber/Navber";
 
 const Home = () => {
     return(
         <div>
-            <Navber/>
+            <h1>Masum Mahmud</h1>
         </div>
     )
 }
