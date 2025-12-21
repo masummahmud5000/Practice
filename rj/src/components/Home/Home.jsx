@@ -12,7 +12,7 @@ const Home = () => {
     }, [])
     ////////////////////////////////////
     const submitHandle = (e) => {
-        e.preventDefault()
+        // e.preventDefault()
 
         let yourName = e.target.yourName.value
         let yourAge = e.target.yourAge.value
@@ -32,15 +32,34 @@ const Home = () => {
         .then(res => res.json())
         .then(d => console.log(d))
     };
+
+    // Delete List 
+    const deleteUser = (id) => {
+        // console.log(id)
+
+        if (window.confirm('You are sure Click Item Delete!')){
+                fetch(`http://127.0.0.1:8000/main/api/${id}/`, {
+                method: 'DELETE'
+            });
+            window.location.reload();
+        }else{
+            alert('Your Item is not Deleted!')
+        }
+    };
+    
+    
     return(
         <div>
 
             <form action="POST" onSubmit={submitHandle}>
+                <label>Name</label>
                 <input type="text" required placeholder='Enter Your Name' name='yourName'/>
-                <input type="number" required placeholder='Enter Your Age' name='yourAge' />
+                <label>Age</label>
+                <input type="float" required placeholder='Enter Your Age' name='yourAge' />
+                <label>Number</label>
                 <input type="number" required placeholder='Enter Number' name='yourNumber'/>
-                <button type='submit'> Submit</button>
-                <hr />
+                <h1></h1>
+                <button className='btn' type='submit'> Submit</button>
             </form>
             
             <table>
@@ -50,15 +69,26 @@ const Home = () => {
                         <th>Name</th>
                         <th>Age</th>
                         <th>Number</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {info.map(data => (<tr key={data.id}>
                         <td>{data.id}</td>
-                        <td>{data.age}</td>
                         <td>{data.name}</td>
+                        <td>{data.age}</td>
                         <td>{data.phoneNumber}</td>
+                        <td>
                         
+                            <button className='edit'>Edit</button>
+                            
+                        </td>
+                        <td>
+
+                            <button onClick={() => deleteUser(data.id)} className='delete'>Delete</button>
+                            
+                        </td>
                     </tr>))}
                 </tbody>
             </table>

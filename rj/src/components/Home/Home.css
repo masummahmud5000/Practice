@@ -1,0 +1,106 @@
+.delete{
+    /* margin-left: 20px; */
+    width: 80px;
+    height: 25px;
+    border-radius: 5px;
+    border: none;
+    background: red;
+    color: white;
+    border: 1px solid gray;
+}
+.delete:hover{
+    /* background: rgb(136, 52, 52); */
+    /* border: 2px dotted rgb(25, 216, 223); */
+    box-shadow: 0 0 5px black;
+}
+.edit{
+    /* margin-left: 20px; */
+    width: 80px;
+    height: 25px;
+    border-radius: 5px;
+    border: none;
+    background: green;
+    color: white;
+    border: 1px solid gray;
+}
+.edit:hover{
+    /* background: rgb(136, 52, 52); */
+    /* border: 2px dotted rgb(25, 216, 223); */
+    box-shadow: 0 0 5px black;
+}
+/* .fr{
+    background-color: red;
+    color: red;
+} */
+ table{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+ }
+ td, th{
+    border: 1px solid #ddd;
+    padding: 8px;
+
+ }
+ tr:nth-child(even){
+    background-color: #f2f2f2;
+ }
+ tr:hover {
+    background-color: #ddd;
+ }
+ th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6d;
+    color: white;
+ }
+
+
+
+
+
+
+
+ form{
+    display: block;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #ddd;
+    padding: 30px;
+ }
+ label, input, .btn{
+    display: block;
+    margin-left: 80px;
+ }
+ label{
+    margin-top: 12px;
+
+ }
+ input{
+    margin-top: 5px;
+    border: none;
+    border-radius: 8px;
+
+    width: 200px;
+    height: 25px;
+    /* text-wrap; */
+    font-size: 12px;
+ }
+ .btn{
+    width: 200px;
+    border-radius: 8px;
+    height: 28px;
+    border: none;
+    background-color: green;
+    font-size: 15px;
+    color: white;
+    font-weight: 700;
+ }
+ .btn:hover{
+    /* background-color: #d1ad0a; */
+    box-shadow: 0 0 5px black;
+ }
+ input:focus{
+    outline: none;
+ }
