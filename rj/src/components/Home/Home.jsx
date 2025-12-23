@@ -1,25 +1,33 @@
-import './Home.css'
+import './Home.css';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Home = () => {
 
     const [info, setInfo] = useState([])
 
     useEffect(() => {
-        const LoadData = async () => {
+        const fetchData = async () => {
             try{
-                const url = await fetch('http://127.0.0.1:8000/main/api/');
-                const jsonConvert = await url.json();
-                setInfo(jsonConvert)
-            } catch (error){
-                console.log('not data fount',error)
+                const getUrl = await axios.get('http://127.0.0.1:8000/main/api/',{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                setInfo(getUrl.data)
             }
-        }
-        LoadData();
+            catch(error){
+                console.log('error message')
+            }
+        };
+        // window.location.reload()
+        fetchData();
+        
     }, [])
     ////////////////////////////////////
     const submitHandle = async(e) => {
-        // e.preventDefault()
+        e.preventDefault()
 
         let yourName = e.target.yourName.value
         let yourAge = e.target.yourAge.value
@@ -35,8 +43,9 @@ const Home = () => {
                     phoneNumber: yourNumber,
                 }),
             });
-            const data = await response.json();
-            console.log(data);
+            window.location.reload();
+            // const data = await response.json();
+            // console.log(data);
         } catch (error){
             console.log(error)
         }
@@ -48,7 +57,7 @@ const Home = () => {
             try{
                 const response = await fetch(`http://127.0.0.1:8000/main/api/${id}/`, {
                     method: 'DELETE',
-                })
+                });
                 window.location.reload();
                 response();
             }catch(error){
