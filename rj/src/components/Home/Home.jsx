@@ -5,6 +5,7 @@ import axios from 'axios';
 const Home = () => {
 
     const [info, setInfo] = useState([])
+    const [time, setTime] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -13,9 +14,10 @@ const Home = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    }                       
                 });
                 setInfo(getUrl.data)
+                // window.location.reload();
             }
             catch(error){
                 console.log('error message')
@@ -33,42 +35,76 @@ const Home = () => {
         let yourAge = e.target.yourAge.value
         let yourNumber = e.target.yourNumber.value
         
+        const userData = {
+            name: yourName,
+            age: yourAge,
+            phoneNumber: yourNumber
+        };
+        const url = 'http://127.0.0.1:8000/main/api/';
+        const header = {'Content-Type':'application/json'};
+
         try{
-            const response = await fetch('http://127.0.0.1:8000/main/api/', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    name: yourName,
-                    age: yourAge,
-                    phoneNumber: yourNumber,
-                }),
-            });
+            await axios.post(url,userData,{headers: header});
+            // console.log(response.data);
             window.location.reload();
-            // const data = await response.json();
-            // console.log(data);
-        } catch (error){
-            console.log(error)
+
+        } catch(error){
+            
         }
+        // window.location.reload();
     };
 
-    // Delete List 
-    const deleteUser = async(id) => {
-        if (window.confirm('your sure Delete this Data!')){
-            try{
-                const response = await fetch(`http://127.0.0.1:8000/main/api/${id}/`, {
-                    method: 'DELETE',
-                });
-                window.location.reload();
-                response();
-            }catch(error){
-                console.log(error)
+    // Delete List , Start Point 
+    const deleteUser  = async (id) => {
+
+        let counTime = 6;
+        if (window.confirm('are your sure Delete your Data!')){
+            const timer = setInterval( async () => {
+            if (counTime >= 2){
+                
+                counTime --
+                setTime(counTime);
+            }else {
+                setTime(null)
+                clearInterval(timer)
+
+                try{
+                    await axios.delete(`http://127.0.0.1:8000/main/api/${id}/`);
+                    await window.location.reload();
+                }
+                catch(error){
+                    console.log('masum', error);
+                }
             }
+        }, 1000)
         }else{
-            alert('your Data is not Deleted!')
-        }
+            alert('Not Deleted Data!')
+        }        
     };
+    // Delete List End Point
     
-    
+
+    /// Edit Update Start ///
+    const updateUser  = async (id) => {
+
+        const updateData = {
+            name: 'Masum Mahmud',
+            phoneNumber: '01918937532'
+        }
+        
+        try{
+            await axios.patch(`http://127.0.0.1:8000/main/api/${id}/`, updateData, {'Content-Type': 'application/json'})
+            await window.location.reload();
+            // console.log('update Successfull!')
+        }
+        catch(error){
+            console.log('Masum', error)
+        }
+        
+    }
+
+    /// Edit Update End ///
+
     return(
         <div>
 
@@ -82,6 +118,7 @@ const Home = () => {
                 <h1></h1>
                 <button className='btn' type='submit'> Submit</button>
             </form>
+            <h1 className='count'>{time}</h1>
             
             <table>
                 <thead>
@@ -102,7 +139,7 @@ const Home = () => {
                         <td>{data.phoneNumber}</td>
                         <td>
                         
-                            <button className='edit'>Edit</button>
+                            <button onClick={() => updateUser(data.id)} className='edit'>Edit</button>
                             
                         </td>
                         <td>

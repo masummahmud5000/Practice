@@ -104,3 +104,9 @@
  input:focus{
     outline: none;
  }
+
+ .count{
+   color: red;
+   font-family: 'Courier New', Courier, monospace;
+   /* display: none; */
+ }
