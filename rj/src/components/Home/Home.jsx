@@ -6,6 +6,12 @@ const Home = () => {
 
     const [info, setInfo] = useState([])
     const [time, setTime] = useState(null)
+    const [updateName, setUpdateName] = useState('')
+    const [formStatus, setFormStatus] = useState(false)
+    const [editStatus, setEditStatus] = useState(true)
+    const [dataBox, setDataBox] = useState(null)
+    const [editData, setEditData] = useState(null)
+    const [mainForm, setMainForm] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,33 +88,61 @@ const Home = () => {
         }        
     };
     // Delete List End Point
-    
 
     /// Edit Update Start ///
-    const updateUser  = async (id) => {
-
-        const updateData = {
-            name: 'Masum Mahmud',
-            phoneNumber: '01918937532'
-        }
+    const updateUser  = async (data) => {
+        setEditData(data)
+        setFormStatus(true)
+        setEditStatus(false)
+        setUpdateName(data.name)
+        setDataBox(data.id)
+        setMainForm(false)
+    }
+    const Edit = async (e) => {
+        e.preventDefault();
+        let name = e.target.upName.value
+        let age = e.target.upAge.value
+        let phoneNumber = e.target.upNumber.value
+        // let updateData = null
         
+        if (name == ''){
+            name = editData.name
+        }
+        if(age == ''){
+            age = editData.age
+        }
+        if (phoneNumber == ''){
+            phoneNumber = editData.phoneNumber
+        }
+        // console.log(name , age , phoneNumber)
+        const updateData = {
+            name: name,
+            age: age,
+            phoneNumber: phoneNumber
+        };
+        // console.log(updateData, dataBox);
+// |
         try{
-            await axios.patch(`http://127.0.0.1:8000/main/api/${id}/`, updateData, {'Content-Type': 'application/json'})
+            await axios.patch(`http://127.0.0.1:8000/main/api/${dataBox}/`, updateData, {headers: {'Content-Type':'application/json'}});
+            // console.log('update Successfull!');
+            // console.log(updateData)
             await window.location.reload();
-            // console.log('update Successfull!')
+            // await setEditStatus(true);
         }
         catch(error){
-            console.log('Masum', error)
+            console.log(error)
         }
         
-    }
+
+    };
 
     /// Edit Update End ///
 
     return(
         <div>
 
-            <form action="POST" onSubmit={submitHandle}>
+            {mainForm && (
+                <form action="POST" onSubmit={submitHandle}>
                 <label>Name</label>
                 <input type="text" required placeholder='Enter Your Name' name='yourName'/>
                 <label>Age</label>
@@ -118,8 +152,20 @@ const Home = () => {
                 <h1></h1>
                 <button className='btn' type='submit'> Submit</button>
             </form>
+            )}
             <h1 className='count'>{time}</h1>
             
+                {formStatus && (
+                    <form onSubmit={Edit} action="patch">
+                        <input type="text" name='upName' placeholder='Enter your update Name'/>
+                        <input type="float" name='upAge' placeholder='Enter your update Age' />
+                        <input type="number" name='upNumber' placeholder='Enter your update Number' />
+                        <br />
+                        <button type='submit' className='btn'>Update</button>
+                    </form>
+                )}
+                        <h1>{updateName}
+            </h1>
             <table>
                 <thead>
                     <tr>
@@ -139,7 +185,7 @@ const Home = () => {
                         <td>{data.phoneNumber}</td>
                         <td>
                         
-                            <button onClick={() => updateUser(data.id)} className='edit'>Edit</button>
+                            {editStatus && <button onClick={() => updateUser(data)} className='edit'>Edit</button>}
                             
                         </td>
                         <td>
