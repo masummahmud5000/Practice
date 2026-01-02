@@ -1,0 +1,78 @@
+form{
+    background-color: rgb(187, 50, 50);
+    width: 300px;
+    height: 450px;
+    border-radius: 50px;
+    border-top-right-radius: 6px;
+    box-shadow: 5px 5px 20px black;
+    padding: 30px;
+    border: double gold;
+}
+div{
+    padding-top: 20px;
+    /* background-color: black; */
+    display: flex;
+    justify-content: center;
+}
+label{
+    display: block;
+    font-size: 1.5rem;
+    color: white;
+    margin-top: 15px;
+    font-weight: bold;
+}
+input{
+    display: flex;
+    height: 35px;
+    font-size: 1rem;
+    width: 100%;
+    border-radius: 18px;
+    text-align: center;
+    border-top-right-radius: 1px;
+    border: none;
+}
+input:focus{
+    outline-color: green;
+}
+hr{
+    margin-top: 20px;
+}
+button{
+    width: 100%;
+    height: 35px;
+    margin-top: 15px;
+}
+h1{
+    text-align: center;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    /* font-weight: 800; */
+    color: rgb(243, 178, 14);
+    text-shadow: 2px 2px 10px black;
+
+}
+p{
+    display: inline;
+}
+p ,a{
+    color: white;
+    margin-top: 5px;
+}
+a{
+    text-decoration: none;
+}
+.btn{
+    font-size: 1.5rem;
+    font-weight: bold;
+    /* font-family: fantasy; */
+    color: aliceblue;
+    background: linear-gradient(45deg, blue, green);
+    border: none;
+    border-radius: 29px;
+    border-top-right-radius: 1px;
+    box-shadow: 5px 3px 10px black;
+    cursor: pointer;
+}
+.btn:hover{
+    box-shadow: 5px 3px 10px white;
+    
+}

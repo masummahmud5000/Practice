@@ -17,6 +17,9 @@
     background-repeat: no-repeat;
     padding: 10px 10%;
     overflow: hidden;
+    top: 0;
+    position: sticky;
+    z-index: 2;
 
 }
 nav{
@@ -55,6 +58,11 @@ nav ul li a:hover{
     font-size: 14px;
     border-radius: 30px;
     border-top-right-radius: 0;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.orBtn:hover{
+    font-size: 20px;
 }
 .logo{
     /* background-color: red;
@@ -62,4 +70,59 @@ nav ul li a:hover{
     text-shadow: 3px 5px 15px white;
     color: greenyellow;
     cursor: pointer;
+    transition: 0.5s
+}
+.logo:hover{
+    font-size: 2.3rem;
+}
+.bgImg{
+    background-image: url('../../../assets/morskie-oko-tatry.jpg');
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    opacity: 0.8;
+    z-index: 1;
+    padding-top: 60px;
+    justify-content: center;
+    align-items: center;
+    /* padding-bottom: 80px; */
+    position: relative;
+}
+.bgImg>h1{
+    text-align: center;
+    /* margin-top: 100px; */
+    color: rgb(206, 209, 8);
+    font-style: italic;
+    font-size: 3rem;
+    text-shadow: 3px 5px 10px #000;
+    /* border-left: 5px solid #000; */
+}
+.skill{
+    position: absolute;
+    margin-top: 30px;
+    left: 50%;
+    margin-left: -28%;
+    /* display: flex; */
+    display: grid;
+    justify-content: center;
+    /* align-items: center; */
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 25px 50px;
+    margin-bottom: 20px;
+    /* padding-bottom: 30px; */
+}
+.skill>div{
+    background-color: red;
+    width: 150px;
+    height: 190px;
+    text-align: center;
+    border-radius: 5px 45px;
+    box-shadow: 3px 3px 10px black;
+    padding-top: 25px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    border: 2px double;
+    
+    
 }
