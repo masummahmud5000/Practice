@@ -1,18 +1,14 @@
-// import Game from './Game.jsx/Game'
-// import Login from '../Register/Login'
-import Register from '../Register/Register'
+
 import './Home.css'
-import Navber from './navber/Navber'
-// import NewYear from './newYear/NewYear'
-// import bank from '../../assets/Icons/svgs/solid/bank.svg'
-// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-// import {faHouse, faPhone} from '@fortawesome/free-solid-svg-icons'
 
 const Home = () => {
     return(
-        <div>
-            {/* <Navber/> */}
-            <Register/>
+        <div className='home'>
+            <h1>Hi i am Full Stake Web Developer</h1>
+            {/* <hr /> */}
+            <h2>My Name is : <span className='m1'>M</span>asum <span className='m2'>M</span>ahmud</h2>
+            <h4 className='n'>My Phone Number is : <span className='number'><span className='contryCode'>+88</span>01884-885000</span></h4>
+            <h4 className='thikana'>i am From : বাংলাদেশ, জামালপুর, ইসলামপুর</h4>
         </div>
     )
 }
