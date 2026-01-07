@@ -18,6 +18,9 @@ const Login = () => {
         try{
             const res = await axios.post('http://127.0.0.1:8000/token/', setData, {withCredentials: true})
             localStorage.setItem('access_token', res.data.access);
+            setUserName('');
+            setPassword('');
+            console.log('Login Successfull!')
         }catch(err){
             console.log(err)
         }
@@ -32,12 +35,12 @@ const Login = () => {
                 <label>User Name</label>
                 <div>
                     <FontAwesomeIcon icon={faUserTag}/>
-                    <input type="text" placeholder='Your UserName' required onChange={(e) => setUserName(e.target.value)}/>
+                    <input value={userName} type="text" placeholder='Your UserName' required onChange={(e) => setUserName(e.target.value)}/>
                 </div>
                 <label>Password</label>
                 <div>
                     <FontAwesomeIcon icon={faLock}/>
-                    <input type="password" placeholder='Your Password' required onChange={(e) => setPassword(e.target.value)}/>
+                    <input value={password} type="password" placeholder='Your Password' required onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <button className='submit' type='submit'><FontAwesomeIcon icon={faPaperPlane} style={{marginRight: '5px'}}/>Login</button>
                 <button className='reset' type='reset'><FontAwesomeIcon icon={faRotateLeft} style={{marginRight: '5px'}}/>Reset Form</button>
