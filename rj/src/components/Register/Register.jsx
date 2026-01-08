@@ -20,6 +20,10 @@ const Register = () => {
             username: userName,
             password: password
         };
+        const loginData = {
+            username: userName,
+            password: password
+        };
 
         try{
             // console.log(dataSet)
@@ -29,7 +33,15 @@ const Register = () => {
             setUserName('');
             setPassword('');
             setCreatedError('');
-            window.location.href='/login';
+            // window.location.href='/login';
+            try{
+                const res = await axios.post('http://127.0.0.1:8000/token/', loginData);
+                localStorage.setItem('access_token', res.data.access_token);
+                localStorage.setItem('refresh_token', res.data.refresh_token);
+                window.location.href='/contact'
+            }catch(err){
+                console.log(err)
+            }
         } catch(error){
             if (error.response.status === 406){
                 setCreatedError('UserName Alredy Created');

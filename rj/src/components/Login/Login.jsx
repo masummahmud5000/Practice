@@ -8,6 +8,7 @@ const Login = () => {
 
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [notFound, setNotFound] = useState('');
 
     const login = async(e) => {
         e.preventDefault();
@@ -23,10 +24,14 @@ const Login = () => {
             localStorage.setItem('refresh_token', res.data.refresh_token);
             setUserName('');
             setPassword('');
-            console.log('Login Successfull!')
+            // console.log('Login Successfull!')
             // console.log(
+            window.location.href='/contact'
+            setNotFound('');
         }catch(err){
-            console.log(err)
+            if (err.status === 404){
+                setNotFound('User Not Found!');
+            }
         }
         
     }
@@ -40,6 +45,7 @@ const Login = () => {
                 <div>
                     <FontAwesomeIcon icon={faUserTag}/>
                     <input value={userName} type="text" placeholder='Your UserName' required onChange={(e) => setUserName(e.target.value)}/>
+                    <p className='error'>{notFound}</p>
                 </div>
                 <label>Password</label>
                 <div>
