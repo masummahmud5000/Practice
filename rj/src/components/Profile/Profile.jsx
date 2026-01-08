@@ -1,35 +1,45 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Profile.css'
-import axios from 'axios';
+// import axios from 'axios';
+import axiosIns from '../../axiosInstance';
 
 const Profile = () => {
-
-    const [balance, setBalance] = useState(0)
-    const [username, setUserName] = useState('')
+    const [username, setUsername] = useState(null)
+    const [balance, setBalance] = useState(null);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem('access_token');
-        const load = async () => {
+        const userProfile = async () => {
+            let accessToken = localStorage.getItem('access_token');
             try{
-                let res = await axios.get('http://127.0.0.1:8000/profile/', {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                    withCredentials: true
+                const res = await axiosIns.get('profile/', {
+                    headers : {
+                        Authorization : `Bearer ${accessToken}`
+                    }
                 })
-                setBalance(res.data.balance)
-                setUserName(res.data.username)
+                // console.log(res.data);
+                setUsername(res.data.username);
+                setBalance(res.data.balance);
             }catch(err){
+                if (err.status === 401){
+                    console.log('মাসুম ভাই , আপনার অ্যাক্সেস টুকেন এর মেয়াদ শেষ !')
+                }
                 console.log(err)
             }
         }
-        load();
+        userProfile();
     }, [])
+
+    const logout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.reload();
+    }
     
     return(
         <div>
             <h1>User Name : {username}</h1>        
-            <h1>Balance : {balance}</h1>        
+            <h1>Balance : {balance}</h1>      
+            <button onClick={logout}>Log Out</button>
         </div>
     )
 }
