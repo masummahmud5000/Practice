@@ -1,7 +1,20 @@
 
+import { useEffect } from 'react'
 import './Home.css'
 
 const Home = () => {
+
+    // useEffect(() => {
+    //     const homeLoad = () => {
+    //         const refreshToken = localStorage.getItem('refresh_token');
+    //         // console.log(refreshToken)
+    //         if (refreshToken === null){
+
+    //         }
+    //     }
+    //     homeLoad();
+    // }, [])
+    
     return(
         <div className='home'>
             <h1>Hi i am Full Stake Web Developer</h1>

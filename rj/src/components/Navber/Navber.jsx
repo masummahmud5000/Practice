@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import './Navber.css';
 import { Outlet, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Navber = () => {
-
+    const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
+    const [visiblebtn, setVisiblebtn] = useState(true);
     // const [border, setBorder] = useState(null);
 
     const reload = () => {
-        window.location.reload();
+        navigate('/')
     }
 
     const borderCon = {
@@ -22,13 +24,20 @@ const Navber = () => {
         if (refreshToken === null){
             // console.log('The token is null')
             setVisible(false);
+            setVisiblebtn(true);
         }else{
             // console.log('The is token is not a null')
             setVisible(true);
+            setVisiblebtn(false);
         }
         
     }, [])
 
+    const logout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.reload();
+    }
     
     return(
         <div>
@@ -37,9 +46,9 @@ const Navber = () => {
                 <ul className='linkBox'>
                     <Link to='/' style={visible ? null : borderCon} className='linkHome'>Home</Link>
                     { visible && <Link to='/contact' className='linkContact'>Profile</Link>}
-                    { visible && <Link to='/staff' className='linkStuff'>Stuff-List</Link>}
-                    <Link to='/register' className='linkRegister'>Register</Link>
-                    <Link to='/login' className='linkLogin'>LogIn</Link>
+                    { visible && <Link onClick={logout} className='linkStuff'>Logout</Link>}
+                    { visiblebtn && <Link to='/register' className='linkRegister'>Register</Link>}
+                    {visiblebtn && <Link to='/login' className='linkLogin'>LogIn</Link>}
                 </ul>
             </nav>
         </div>

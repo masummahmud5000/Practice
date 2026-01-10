@@ -3,18 +3,25 @@ import axios from 'axios';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faUser, faUserTag, faLock, faRotateLeft, faPaperPlane} from '@fortawesome/free-solid-svg-icons'
+import { replace, useNavigate } from 'react-router-dom';
 // import {replace, useNavigate} from 'react-router-dom'
 
 const Register = () => {
+
+    // const navigate = (useNavigate);
+
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [createdError, setCreatedError] = useState('');
 
+    // const transterLogin = () => {
+    //     // window.location.href='/login'
+    // }
     ///////////////
     const postData = async(e) => {
         e.preventDefault();
-
+        
         const dataSet = {
             name: name,
             username: userName,
@@ -44,7 +51,8 @@ const Register = () => {
             }
         } catch(error){
             if (error.response.status === 406){
-                setCreatedError('UserName Alredy Created');
+                // navigate('/');
+                setCreatedError('UserName Alredy Created! Login Please?');
             }
         }
     };

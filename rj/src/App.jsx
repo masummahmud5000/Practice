@@ -7,7 +7,7 @@ import Register from './components/Register/Register'
 import Navber from './components/Navber/Navber'
 import Login from './components/Login/Login'
 // import Contact from './components/Contact/Contact'
-import Staff from './components/Staff-list/Staff'
+// import Staff from './components/Staff-list/Staff'
 import Profile from './components/Profile/Profile'
 // import Karigor from './components/Karigor/Karigor'
 
@@ -21,7 +21,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/contact' element={<Profile/>}/>
-        <Route path='/staff' element={<Staff/>}/>
+        
       </Routes>
     </BrowserRouter>
   )

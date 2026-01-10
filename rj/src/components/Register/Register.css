@@ -90,4 +90,5 @@ input:focus{
     font-size: 0.9rem;
     display: flex;
     width: 40vw;
+    cursor: pointer;
 }
