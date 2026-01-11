@@ -30,7 +30,7 @@ const Login = () => {
             setNotFound('');
         }catch(err){
             if (err.status === 404){
-                setNotFound('User Not Found!');
+                setNotFound('User or Password Not Found!');
             }
         }
         
