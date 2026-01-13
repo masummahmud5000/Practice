@@ -110,3 +110,15 @@ form>button{
     background-color: gold;
     color: blue;
 }
+.balance{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: blue;
+}
+.charge{
+    margin-left: 10px;
+    margin-top: 10px;
+    color: rgb(58, 5, 250);
+    font-weight: bold;
+    text-shadow: 2px 2px 10px white;
+    font-size: 1.2rem;
+}

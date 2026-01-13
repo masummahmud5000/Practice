@@ -22,7 +22,10 @@ const Profile = () => {
     const [depoPassword, setDepoPassword] = useState(null);
     const [withPassword, setWithPassword] = useState(null);
     const [sendPassword, setSendPassword] = useState(null);
+    const [charge, setCharge] = useState(null);
 
+    // setCharge(withBalance / 1000 * 7.70)
+    
     const [balanceError, setBalanceError] = useState(null);
     const [passwordValid, setPasswordValid] = useState(null);
     
@@ -175,7 +178,7 @@ const Profile = () => {
             <div className="bashboard">
                 <div className="userDetails">
                     <h1>User Name : {username}</h1>
-                    <h3>Balance : $ {balance?.toLocaleString()}</h3>
+                    <h3>Balance : $ <span className='balance'>{balance?.toLocaleString()}</span></h3>
                     <button onClick={deposite} className='depo'>Deposite</button>
                     <button onClick={withdraw} className='with'>Withdraw</button>
                     <button onClick={sendMoney} className='send'>Send Money</button>
@@ -188,6 +191,7 @@ const Profile = () => {
                 </form>}
 
                 { withh && <form className='form form2' onSubmit={withdrawPost}>
+                    <p className='charge'>Service Charge : {(withBalance / 1000 * 7.70).toFixed(2)} Taka</p>
                     <input onChange={(e) => {setWithBalance(e.target.value)}} type="number" placeholder='Enter Your Balance!' required/>
                     <p className='erro'>{balanceError}</p>
                     <input onChange={(e) => {setWithPassword(e.target.value)}} type="password" placeholder='Enter Your Password' required/>
