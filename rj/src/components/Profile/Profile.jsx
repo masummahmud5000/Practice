@@ -8,6 +8,7 @@ const Profile = () => {
     const [user_id, setUser_id] = useState(null);
     const [user_id_valid, setUser_id_valid] = useState(null);
 
+    // const [pass, setPass] = useState(null)
     const [username, setUsername] = useState(null);
     const [balance, setBalance] = useState(null);
 
@@ -23,6 +24,7 @@ const Profile = () => {
     const [withPassword, setWithPassword] = useState(null);
     const [sendPassword, setSendPassword] = useState(null);
     const [charge, setCharge] = useState(null);
+    const [tran, setTran] = useState([])
 
     // setCharge(withBalance / 1000 * 7.70)
     
@@ -49,16 +51,18 @@ const Profile = () => {
 
     useEffect(() => {
         const userProfile = async () => {
-            let accessToken = localStorage.getItem('access_token');
+            // let accessToken = localStorage.getItem('access_token');
             try{
-                const res = await axiosIns.get('profile/', 
-                    // headers : {
-                    //     Authorization : `Bearer ${accessToken}`
-                    // }
-                )
-                // console.log(res.data);
+                const res = await axiosIns.get('profile/')
                 setUsername(res.data.username);
                 setBalance(res.data.balance);
+                // setPass(res.password);
+                // console.log(res.data.password)
+
+                const tr = await axiosIns.get('transaction/')
+                setTran(tr.data)
+                // console.log(tran)
+
             }catch(err){
                 if (err.status === 401){
                     console.log('মাসুম ভাই , আপনার অ্যাক্সেস টুকেন এর মেয়াদ শেষ !')
@@ -78,17 +82,24 @@ const Profile = () => {
             password: depoPassword
         };
         try{
-            const res = await axiosIns.post('deposite/', balanceData);
-            // console.log(res.data)
-            if (res.status === 202){
-                setDepo(false)
-                setBalanceError(null)
-                setPasswordValid(null)
-                window.location.reload();
-            }
+            const res = await axiosIns.post('deposite/',balanceData);
+            console.log(res.data)
+            setBalanceError(null)
+            setPasswordValid(null)
+            window.location.reload();
         }catch(err){
-            if (err.status === 404){
-                setPasswordValid('Password Not Match!');
+            const balanceCode = err.response.data.balance?.[0]
+            const passwordCode = err.response.data.password?.[0]
+            // console.log(err.response.data)
+            if (passwordCode == 'password'){
+                setPasswordValid('Invalid Password try again!')
+                setBalanceError(null)
+            }else if(balanceCode == 'balance_zero'){
+                setBalanceError('Minimum Deposite 50 Taka, without Down!')
+                setPasswordValid(null)
+            }else if(balanceCode == 'balance_limit'){
+                setBalanceError('Maximum Deposite 25,000 Taka, without Over')
+                setPasswordValid(null)
             }
         }
     };
@@ -182,9 +193,11 @@ const Profile = () => {
                     <button onClick={deposite} className='depo'>Deposite</button>
                     <button onClick={withdraw} className='with'>Withdraw</button>
                     <button onClick={sendMoney} className='send'>Send Money</button>
+                    {/* <h1>{pass}</h1> */}
                 </div>
                 { depo && <form className='form' onSubmit={depositePost}>
                     <input onChange={(e) => {setDepoBalance(e.target.value)}} type="number" placeholder='Enter Your Balance!' required/>
+                    <p className='erro'>{balanceError}</p>
                     <input onChange={(e) => {setDepoPassword(e.target.value)}} type="password" placeholder='Enter Your Password' required/>
                     <p className='erro'>{passwordValid}</p>
                     <button>Deposite</button>
@@ -207,6 +220,29 @@ const Profile = () => {
                     <p className='erro'>{passwordValid}</p>
                     <button>Send Money</button>
                 </form>}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction</th>
+                            <th>Amount</th>
+                            <th>Charge</th>
+                            <th>Staus</th>
+                            <th>Date Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tran.map(item => (
+                            <tr key={item.id}>
+                                <td>{item.name}</td>
+                                <td>{item.amount}</td>
+                                <td>{item.charge}</td>
+                                <td>{item.status}</td>
+                                <td>{item.time}</td>
+                            </tr>
+                        ))}
+
+                    </tbody>
+                </table>
             </div>
         </div>
     )
