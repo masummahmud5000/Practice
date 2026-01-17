@@ -13,7 +13,8 @@ const Register = () => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
-    const [createdError, setCreatedError] = useState('');
+    const [createdError, setCreatedError] = useState(null);
+    const [passwordError, setPasswordError] = useState(null);
 
     // const transterLogin = () => {
     //     // window.location.href='/login'
@@ -47,12 +48,27 @@ const Register = () => {
                 localStorage.setItem('refresh_token', res.data.refresh_token);
                 window.location.href='/contact'
             }catch(err){
-                console.log(err)
+                // console.log(err)
             }
         } catch(error){
-            if (error.response.status === 406){
-                // navigate('/');
-                setCreatedError('UserName Alredy Created! Login Please?');
+            const errorCode = error.response.data.username;
+            const errorCodePassword = error.response.data.password;
+            // console.log(errorCode)
+            if (errorCode?.includes('usernameNotStrong')){
+                setCreatedError('User Name is not Strong')
+                setPasswordError(null)
+                setTimeout(()=>setCreatedError(null),5000)
+
+            }else if(errorCode?.includes('userAlready')){
+                setCreatedError('User Name Already Create')
+                setPasswordError(null)
+                setTimeout(()=>setCreatedError(null),5000)
+
+            }else if(errorCodePassword?.includes('passNotStrong')){
+                setPasswordError('Password Minimum 8 Digit!')
+                
+                setCreatedError(null)
+                setTimeout(()=>setPasswordError(null),5000)
             }
         }
     };
@@ -77,6 +93,7 @@ const Register = () => {
                 <div>
                     <FontAwesomeIcon icon={faLock}/>
                     <input value={password} type="password" placeholder='Minimum 8 Digit Password' required onChange={(e) => setPassword(e.target.value)}/>
+                    <p className='error'>{passwordError}</p>
                     
                 </div>
                 <button className='submit' type='submit'><FontAwesomeIcon icon={faPaperPlane} style={{marginRight: '5px'}}/>Sumbit</button>

@@ -56,8 +56,8 @@ const Profile = () => {
                 const res = await axiosIns.get('profile/')
                 setUsername(res.data.username);
                 setBalance(res.data.balance);
-                // setPass(res.password);
-                // console.log(res.data.password)
+                // setPass(res.pass);
+                // console.log(res.data.pass)
 
                 const tr = await axiosIns.get('transaction/')
                 setTran(tr.data)
@@ -67,7 +67,7 @@ const Profile = () => {
                 if (err.status === 401){
                     console.log('মাসুম ভাই , আপনার অ্যাক্সেস টুকেন এর মেয়াদ শেষ !')
                 }
-                console.log(err)
+                // console.log(err)
             }
         }
         userProfile();
@@ -83,10 +83,12 @@ const Profile = () => {
         };
         try{
             const res = await axiosIns.post('deposite/',balanceData);
-            console.log(res.data)
-            setBalanceError(null)
-            setPasswordValid(null)
-            window.location.reload();
+            if (res.status === 200){
+                console.log(res.data)
+                setBalanceError(null)
+                setPasswordValid(null)
+                window.location.reload();
+            }
         }catch(err){
             const balanceCode = err.response.data.balance?.[0]
             const passwordCode = err.response.data.password?.[0]
@@ -94,12 +96,17 @@ const Profile = () => {
             if (passwordCode == 'password'){
                 setPasswordValid('Invalid Password try again!')
                 setBalanceError(null)
+                setTimeout(() => setPasswordValid(null), 5000)
+                
             }else if(balanceCode == 'balance_zero'){
                 setBalanceError('Minimum Deposite 50 Taka, without Down!')
                 setPasswordValid(null)
+                setTimeout(()=>setBalanceError(null), 5000)
+                
             }else if(balanceCode == 'balance_limit'){
                 setBalanceError('Maximum Deposite 25,000 Taka, without Over')
                 setPasswordValid(null)
+                setTimeout(()=>setBalanceError(null), 5000)
             }
         }
     };
@@ -111,24 +118,39 @@ const Profile = () => {
             password: withPassword
         }
         try{
-            const res = await axiosIns.post('withdraw/', balanceData);
-            if (res.status === 202){
+           const res = await axiosIns.post('withdraw/', balanceData);
+            if(res.status === 200){
+                window.location.reload();
                 setWith(false)
                 setBalanceError(null)
                 setPasswordValid(null)
-                window.location.reload();
             }
+
         }catch(err){
-            if (err.status === 404){
-                setPasswordValid('Password Not Match!')
+            const ErrorCode = err.response?.data.non_field_errors;
+            // console.log(ErrorCode)
+            if (ErrorCode?.includes('password')){
+                setPasswordValid('Invalid Password try again!')
                 setBalanceError(null)
+                setTimeout(() => setPasswordValid(null), 5000);
+
+            }else if (ErrorCode?.includes('balance_low')){
+                setBalanceError('Insufficient Balance!')
+                setPasswordValid(null)
+                setTimeout(() => setBalanceError(null), 5000)
+                
+            }else if(ErrorCode?.includes('balance_zero')){
+                setBalanceError('Minimum withdaraw 50 Taka!')
+                setPasswordValid(null)
+                setTimeout(() => setBalanceError(null), 5000)
+                
+            }else if(ErrorCode?.includes('balance_limit')){
+                setBalanceError('Maximun withdaraw 25,000 Taka!')
+                setPasswordValid(null)
+                setTimeout(() => setBalanceError(null), 5000)
             }else{
-                if (err.status === 400){
-                    setBalanceError('insufficient Balance')
-                    setPasswordValid(null)
-                }
+                // console.log(err)
             }
-            console.log(err)
         }
     }
 
@@ -142,39 +164,55 @@ const Profile = () => {
         };
         try{
             const res = await axiosIns.post('sendMoney/', dataSet);
-            // console.log(res.data.success)
-            const errorType = res.data.Error;
-            if (errorType === 'password'){
-                // console.log('password not match')
-                setPasswordValid('Password Not Match')
+            if (res.status === 200){
+                setSend(false)
                 setUser_id_valid(null)
-                setBalanceError(null)
-
-            }else if(errorType === 'userName'){
-                // console.log('user not found')
-                setUser_id_valid('Sorry User Not Found!')
                 setPasswordValid(null)
                 setBalanceError(null)
-
-            }else if(errorType === 'self'){
-                // console.log('sorry this your id')
-                setUser_id_valid('Invalid transiction!')
-                setPasswordValid(null)
-                setBalanceError(null)
-
-            }else if(errorType === 'balance'){
-                setBalanceError('your balance insufficient')
-                setPasswordValid(null)
-                setUser_id_valid(null)
-
-            }else if(errorType === 'success'){
-                setPasswordValid(null)
-                setUser_id_valid(null)
-                setBalanceError(null)
-                window.location.reload();
+                window.location.reload()
             }
         }catch(err){
-            console.log(err)
+            const errorCode = err.response?.data.non_field_errors;
+            // console.log(errorCode)
+            if (errorCode?.includes('password')){
+                setPasswordValid('Invalid Password try again!')
+                setBalanceError(null)
+                setUser_id_valid(null)
+
+                setTimeout(()=>setPasswordValid(null), 5000)
+            }else if(errorCode?.includes('receiver')){
+                setUser_id_valid('User Not Found')
+                setPasswordValid(null)
+                setBalanceError(null)
+
+                setTimeout(()=>setUser_id_valid(null), 5000)
+            }else if(errorCode?.includes('self')){
+                setUser_id_valid('Sorry Self Transaction Not Allow')
+                setPasswordValid(null)
+                setBalanceError(null)
+
+                setTimeout(()=> setUser_id_valid(null), 5000)
+            }else if(errorCode?.includes('balance_low')){
+                setBalanceError('insufficient Balance')
+                setPasswordValid(null)
+                setUser_id_valid(null)
+
+                setTimeout(()=> setBalanceError(null),5000)
+            }else if(errorCode?.includes('balance_zoro')){
+                setBalanceError('Minimum Send Money 50 Taka')
+                setPasswordValid(null)
+                setUser_id_valid(null)
+
+                setTimeout(()=> setBalanceError(null),5000)
+            }else if(errorCode?.includes('balance_limit')){
+                setBalanceError('Maximum Send Money 20,000 Taka')
+                setUser_id_valid(null)
+                setPasswordValid(null)
+
+                setTimeout(()=>setBalanceError(null),5000)
+            }else{
+                // console.log(err)
+            }
         }
     }
 
@@ -226,8 +264,9 @@ const Profile = () => {
                             <th>Transaction</th>
                             <th>Amount</th>
                             <th>Charge</th>
-                            <th>Staus</th>
-                            <th>Date Time</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -237,7 +276,8 @@ const Profile = () => {
                                 <td>{item.amount}</td>
                                 <td>{item.charge}</td>
                                 <td>{item.status}</td>
-                                <td>{item.time}</td>
+                                <td>{new Date(item.time).toLocaleTimeString('en-US', {hour12:true})}</td>
+                                <td>{new Date(item.time).toLocaleDateString('en-US')}</td>
                             </tr>
                         ))}
 
