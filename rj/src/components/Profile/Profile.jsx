@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import './Profile.css'
+import {jwtDecode} from 'jwt-decode'
 // import axios from 'axios';
 import axiosIns from '../../axiosInstance';
 // import axios from 'axios';
 
 const Profile = () => {
+    const [permission, setPermission] = useState(false);
     const [user_id, setUser_id] = useState(null);
     const [user_id_valid, setUser_id_valid] = useState(null);
 
     // const [pass, setPass] = useState(null)
     const [username, setUsername] = useState(null);
     const [balance, setBalance] = useState(null);
-
+    
     const [depo, setDepo] = useState(false);
     const [withh, setWith] = useState(false);
     const [send, setSend] = useState(false)
@@ -19,13 +21,13 @@ const Profile = () => {
     const [depoBalance, setDepoBalance] = useState(null);
     const [withBalance, setWithBalance] = useState(null);
     const [sendBalance, setSendBalance] = useState(null);
-
+    
     const [depoPassword, setDepoPassword] = useState(null);
     const [withPassword, setWithPassword] = useState(null);
     const [sendPassword, setSendPassword] = useState(null);
     const [charge, setCharge] = useState(null);
     const [tran, setTran] = useState([])
-
+    
     // setCharge(withBalance / 1000 * 7.70)
     
     const [balanceError, setBalanceError] = useState(null);
@@ -48,7 +50,7 @@ const Profile = () => {
         setDepo(false);
         setWith(false);
     }
-
+    
     useEffect(() => {
         const userProfile = async () => {
             // let accessToken = localStorage.getItem('access_token');
@@ -57,12 +59,16 @@ const Profile = () => {
                 setUsername(res.data.username);
                 setBalance(res.data.balance);
                 // setPass(res.pass);
+                const access_token = localStorage.getItem('access_token');
+                const deCode = jwtDecode(access_token)
+                setPermission(deCode.is_staff)
+                // console.log(deCode.is_staff)
                 // console.log(res.data.pass)
-
+                
                 const tr = await axiosIns.get('transaction/')
                 setTran(tr.data.results);
                 // console.log(tran)
-
+                
             }catch(err){
                 if (err.status === 401){
                     console.log('মাসুম ভাই , আপনার অ্যাক্সেস টুকেন এর মেয়াদ শেষ !')
@@ -72,7 +78,7 @@ const Profile = () => {
         }
         userProfile();
     }, [])
-
+    
     const depositePost = async (e) => {
         e.preventDefault();
         // console.log(depoBalance)
@@ -118,14 +124,14 @@ const Profile = () => {
             password: withPassword
         }
         try{
-           const res = await axiosIns.post('withdraw/', balanceData);
+            const res = await axiosIns.post('withdraw/', balanceData);
             if(res.status === 200){
                 window.location.reload();
                 setWith(false)
                 setBalanceError(null)
                 setPasswordValid(null)
             }
-
+            
         }catch(err){
             const ErrorCode = err.response?.data.non_field_errors;
             // console.log(ErrorCode)
@@ -133,7 +139,7 @@ const Profile = () => {
                 setPasswordValid('Invalid Password try again!')
                 setBalanceError(null)
                 setTimeout(() => setPasswordValid(null), 5000);
-
+                
             }else if (ErrorCode?.includes('balance_low')){
                 setBalanceError('Insufficient Balance!')
                 setPasswordValid(null)
@@ -228,7 +234,7 @@ const Profile = () => {
                 <div className="userDetails">
                     <h1>User Name : {username}</h1>
                     <h3>Balance : $ <span className='balance'>{balance?.toLocaleString()}</span></h3>
-                    <button onClick={deposite} className='depo'>Deposite</button>
+                    { permission && <button onClick={deposite} className='depo'>Deposite</button>}
                     <button onClick={withdraw} className='with'>Withdraw</button>
                     <button onClick={sendMoney} className='send'>Send Money</button>
                     {/* <h1>{pass}</h1> */}
