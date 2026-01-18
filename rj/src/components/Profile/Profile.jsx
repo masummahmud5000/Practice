@@ -60,7 +60,7 @@ const Profile = () => {
                 // console.log(res.data.pass)
 
                 const tr = await axiosIns.get('transaction/')
-                setTran(tr.data)
+                setTran(tr.data.results);
                 // console.log(tran)
 
             }catch(err){

@@ -18,19 +18,19 @@ const Login = () => {
         }
         try{
             const res = await axios.post('http://127.0.0.1:8000/token/', setData)
-            // localStorage.setItem('access_token', res.data.access);
             // console.log(res.data.access_token)
-            localStorage.setItem('access_token', res.data.access_token);
-            localStorage.setItem('refresh_token', res.data.refresh_token);
+            localStorage.setItem('access_token', res.data.access_token)
+            localStorage.setItem('refresh_token', res.data.refresh_token)
             setUserName('');
             setPassword('');
-            // console.log('Login Successfull!')
-            // console.log(
             window.location.href='/contact'
             setNotFound('');
         }catch(err){
-            if (err.status === 404){
+            const userError = err.response.data?.non_field_errors;
+            // console.log(userError)
+            if (userError?.includes('usernameInvalid')){
                 setNotFound('User or Password Not Found!');
+                setTimeout(()=>setNotFound(null),3000)
             }
         }
         
